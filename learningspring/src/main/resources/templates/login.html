@@ -2,7 +2,78 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>TalentSprint cycle shop</title>
+<title>TalentSprint Cycle Shop</title>
+<style>
+    /* Body styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    /* Form container */
+    form {
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styles */
+    h1 {
+        color: #333;
+    }
+
+    /* Label styles */
+    label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    /* Input styles */
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 16px;
+    }
+
+    /* Submit button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    /* Submit button hover effect */
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Registration link styles */
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    /* Registration link hover effect */
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
 </head>
 <body>
     <h1>Login!</h1>
@@ -12,7 +83,8 @@
         <input type="text" name="username" id="username" th:field="*{name}">
         <label for="password">Password</label><br>
         <input type="password" name="password" id="password" th:field="*{password}"><br>
-        <a th:href="@{/register}">click to register</a>
+        <a th:href="@{/register}">Click to register</a>
         <input type="submit" value="Login">
     </form>
 </body>
+</html>

@@ -1,6 +1,8 @@
 package com.prodapt.learningspring.controller;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,17 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.prodapt.learningspring.entity.User;
 import com.prodapt.learningspring.business.LoggedInUser;
 import com.prodapt.learningspring.business.NeedsAuth;
 import com.prodapt.learningspring.controller.binding.AddPostForm;
 import com.prodapt.learningspring.controller.exception.ResourceNotFoundException;
+import com.prodapt.learningspring.entity.Comment;
+import com.prodapt.learningspring.entity.LikeId;
+import com.prodapt.learningspring.entity.LikeRecord;
 import com.prodapt.learningspring.entity.Post;
+import com.prodapt.learningspring.repository.CommentCRUDRepository;
+import com.prodapt.learningspring.repository.LikeCRUDRepository;
 import com.prodapt.learningspring.repository.PostRepository;
 import com.prodapt.learningspring.service.UserService;
 
 import jakarta.servlet.ServletException;
-
 @Controller
 
 @RequestMapping("/forum")
@@ -35,12 +40,29 @@ public class ForumController {
 
   private PostRepository postRepository;
 
+ 
+
   @Autowired
 
   private LoggedInUser loggedInUser;
 
+ 
+
   @Autowired
-  private UserService userService;
+
+  private CommentCRUDRepository commentCRUDRepository;
+
+ 
+
+  @Autowired
+
+  private LikeCRUDRepository likeCRUDRepository;
+
+ 
+
+  @Autowired
+
+  UserService userService;
 
  
 
@@ -55,6 +77,9 @@ public class ForumController {
     return "forum/postForm";
 
   }
+
+ 
+
  
 
   @PostMapping("/post/add")
@@ -77,9 +102,10 @@ public class ForumController {
 
     if (user==null) {
 
-        System.out.println("hell messed up");
+        return "redirect:/loginpage";
 
     }
+
     var userId = user.getId();
 
     var freshUser = userService.findById(userId);
@@ -87,8 +113,6 @@ public class ForumController {
     Post post = new Post();
 
     post.setAuthor(freshUser.get());
-
-    post.setLikeids(String.valueOf(user.getId()));
 
     post.setContent(postForm.getContent());
 
@@ -114,9 +138,21 @@ public class ForumController {
 
     model.addAttribute("post", post.get());
 
-    int numLikes = post.get().getLikeids().split(",").length;
+    int numLikes = likeCRUDRepository.countByLikeIdPost(post.get());
+
+    List<LikeRecord> allLikers = likeCRUDRepository.findByLikeIdPost(post.get());
+
+    List<Comment> allCommentRecords = commentCRUDRepository.findAllByPost(post.get());
+
+    List<String> comments = allCommentRecords.stream().map(commentRecord -> commentRecord.getContent()).collect(Collectors.toList());
+
+    List<String> likerNames = allLikers.stream().map(likeRecord -> likeRecord.getLikeId().getUser().getName()).collect(Collectors.toList());
+
+    model.addAttribute("AllComments", comments);
 
     model.addAttribute("likeCount", numLikes);
+
+    model.addAttribute("allLikers", likerNames);
 
     return "forum/postDetail";
 
@@ -124,9 +160,9 @@ public class ForumController {
 
  
 
-  @PostMapping("/post/{id}/like")
+  @PostMapping("/post/{id}/{user_id}/like")
 
-  public String postLike(@PathVariable int id, RedirectAttributes attr) {
+  public String postLike(@PathVariable int id,String Comment, RedirectAttributes attr) {
 
     var post = postRepository.findById(id);
 
@@ -134,13 +170,37 @@ public class ForumController {
 
     if(user==null){
 
-      System.out.println("hell messed up");
+        return "redirect:/loginpage";
 
     }
 
-    if(!post.get().getLikeids().contains(String.valueOf(user.getId())))
+    var freshUser = userService.findById(user.getId());
 
-      post.get().setLikeids(post.get().getLikeids().concat(","+user.getId()));
+     Comment commentRecord = new Comment();
+
+    if(!Comment.equals(null)&&!Comment.equals("")){
+
+      commentRecord.setPost(post.get());
+
+      commentRecord.setUser(freshUser.get());
+
+      commentRecord.setContent(Comment);
+
+      commentCRUDRepository.save(commentRecord);
+
+    }
+
+    LikeId likeId = new LikeId();
+
+    likeId.setUser(freshUser.get());
+
+    likeId.setPost(post.get());
+
+    LikeRecord like = new LikeRecord();
+
+    like.setLikeId(likeId);
+
+    likeCRUDRepository.save(like);
 
     postRepository.save(post.get());
 

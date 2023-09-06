@@ -4,12 +4,70 @@
 <meta charset="UTF-8">
 <title>Blog post</title>
 </head>
+
 <body th:object="${post}">
-	<h1>Post by <span th:text="*{author.name}">John Doe</span></h1>
-	<p th:text="*{content}">This is a post.</p>
-	<p>Likes: <span th:text="${likeCount}">0</span></p>
-	<form method="post" action="#" th:action="@{/forum/post/{id}/like(id = ${post.id})}">
-		<input type="submit" value="Like!">
-	</form>
+
+    <h1>Post by <span th:text="*{author.name}">John Doe</span></h1>
+
+    <p th:text="*{content}">This is a post.</p>
+
+    <p>Likes: <span th:text="${likeCount}">0</span></p>
+
+    <button id="showLikers" >list of liked users</button>
+
+    <div id="unhideThisInJS" th:each="liker : ${allLikers}" style="visibility: hidden">
+
+        <ul>
+
+            <li th:text="${liker}">Liker</li>
+
+        </ul>
+
+    </div>
+
+    <div id="AllComments" th:each="comment : ${AllComments}">
+
+        <ul>
+
+            <li th:text="${comment}">Comment</li>
+
+        </ul>
+
+    </div>
+
+    <form method="post" action="#" th:action="@{/forum/post/{id}/{user_id}/like(id = ${post.id},user_id = *{author.id})}">
+
+        <input type="text" name="Comment">
+
+        <input type="submit" value="Comment!">
+
+        <input type="submit" value="Like!">
+
+    </form>
+
+    <script>
+
+        document.getElementById("showLikers").onclick = event => {
+
+            var likerList = document.getElementById("unhideThisInJS");
+
+            console.log(likerList.style);
+
+            if (likerList.style.cssText == "visibility: hidden;") {
+
+                likerList.style = "visibility: visible";
+
+            }
+
+            else {
+
+                likerList.style = "visibility: hidden";
+
+            }
+
+        }
+
+    </script>
+
 </body>
 </html>
