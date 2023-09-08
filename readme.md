@@ -28,4 +28,4 @@ Key features include user registration, posting content, liking posts and commen
 
 - **Comments:** Commenting on posts is enabled, featuring comment text, timestamps, and commenter usernames. Users can edit and delete their comments, with moderation rules in place. Liking comments to show support is also a feature, with analogous display and notification functionalities as post likes.
 
-![Forum System UML View](ERD image.png)
+![Forum System UML View](C:\Users\sandhya.p\Pictures\Saved Pictures\ERD image.png)
