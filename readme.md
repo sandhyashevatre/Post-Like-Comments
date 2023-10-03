@@ -28,4 +28,16 @@ Key features include user registration, posting content, liking posts and commen
 
 - **Comments:** Commenting on posts is enabled, featuring comment text, timestamps, and commenter usernames. Users can edit and delete their comments, with moderation rules in place. Liking comments to show support is also a feature, with analogous display and notification functionalities as post likes.
 
+## Liking a Comment
+Users have the ability to express their appreciation or agreement with a comment by "liking" it. This feature promotes interaction and engagement within the forum system. Here's how liking a comment is implemented:
+
+ - **Liking a Comment:** Users can like a comment by clicking on a "Like" button associated with each comment. This action signifies their support or agreement with the comment.
+
+ - **Single Like per User:** To maintain the integrity of the liking system, each user is allowed to like a particular comment only once. Attempting to like the same comment multiple times will not increase the like count.
+  
+- **Display of Likes:** The forum system displays the number of likes that a comment has received. Users can see how many other users have liked a particular comment.
+
+ - **Usernames of Likers:** Alongside the like count, the system also displays the usernames of users who have liked a comment. This transparency allows users to see who else agrees with or appreciates a specific comment.
+
+
 ![Forum System UML View](ERD.png)
