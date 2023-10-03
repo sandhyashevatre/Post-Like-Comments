@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Blog post</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body th:object="${post}">
+  <h1 class="text-primary">Post by <span th:text="*{author.name}" class="text-success">John Doe</span></h1>
+  <p th:text="*{content}" class="text-muted">This is a post.</p>
+  <p class="text-info">Post created at: <span th:text="${post.timestamp}">John Doe</span></p>
+  
+          <p>Likes: <span th:text="${post.likes}" class="badge badge-primary">0</span></p>
+          <form
+            th:action="@{/forum/post/{postId}/like-unlike-post(postId=${post.id})}"
+            method="post">
+            <input type="hidden" name="likedByUser" th:value="${post.likedByUser}" />
+            <button type="submit" th:text="${post.likedByUser ? 'Unlike' : 'Like'}" class="btn btn-primary"></button>
+          </form>
+        </li>
+      </ul>
+
+
+  <ul class="list-group comments">
+    <li th:each="comment : ${commentList}" class="list-group-item">
+      <p th:text="${comment.content}" class="text-dark">This is a comment.</p>
+      <p>By: <span th:text="${comment.user.name}" class="text-info">John Doe</span></p>
+      <p class="text-muted">Created at: <span th:text="${comment.timestamp}">John Doe</span></p>
+
+      <!-- Button to like/unlike -->
+      <p>Likes: <span th:text="${comment.likes}" class="badge badge-primary">0</span></p>
+      <form
+        th:action="@{/forum/post/{postId}/like-unlike-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
+        method="post">
+        <input type="hidden" name="likedByUser" th:value="${comment.likedByUser}" />
+        <button type="submit" th:text="${comment.likedByUser ? 'Unlike' : 'Like'}" class="btn btn-primary"></button>
+      </form>
+    </li>
+  </ul>
+
+  <form method="post" action="#" th:action="@{/forum/post/{id}/comment(id=${post.id})}" th:object="${commentForm}">
+    <label for="commentContent">Comment</label>
+    <textarea id="commentContent" th:field="*{content}" class="form-control"></textarea>
+    <input type="submit" value="Add Comment" class="btn btn-primary mt-2" />
+  </form>
+</body>
+
+</html>

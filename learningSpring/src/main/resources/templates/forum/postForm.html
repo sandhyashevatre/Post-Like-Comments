@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>New Post Form</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Add your custom CSS file if needed -->
+  <!-- <link rel="stylesheet" th:href="@{/css/postForm.css} /> -->
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="text-primary">Create a new post!</h1>
+    <form method="post" action="#" th:action="@{/forum/post/add}" th:object="${postForm}">
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea id="content" name="content" th:field="*{content}" class="form-control"></textarea>
+      </div>
+      <input type="hidden" th:field="*{userId}">
+      <button type="submit" class="btn btn-success">Create!</button>
+    </form>
+  </div>
+</body>
+
+</html>

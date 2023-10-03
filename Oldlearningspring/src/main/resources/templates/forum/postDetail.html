@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Blog post</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url('https://media.sproutsocial.com/uploads/2023/09/12-ways-to-use-social-media-for-education-V2-FINAL.svg'); /* Replace 'your-background-image.jpg' with the actual filename and path of your background image */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+        margin: 0;
+        padding: 0;
+    }
+    .pove{
+
+        border: 2px;
+
+    }
+    .container {
+        background-color:  #0078c7;
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 50px;
+        border: 1px solid #ccc;
+        border-radius: 70px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: #0f0d0d;
+    }
+    .header {
+        text-align: center;
+        padding-bottom: 20px;
+    }
+    .post {
+        background-color:  #dfe5fa;
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .post h1 {
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .post p {
+        font-size: 16px;
+    }
+        /* Button styles */
+        .button {
+        background-color: #ffff;
+        color: hsl(0, 8%, 8%);
+        border: 1px;
+        width: auto;
+        height: auto;
+        padding: 5px 5px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .hidden {
+        visibility: hidden;
+    }
+    .like-button,
+    .unlike-button {
+        background-color: #ffff;
+        color: hsl(0, 8%, 8%);
+        border: 1px;
+        width: auto;
+        height: auto;
+        padding: 5px 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+</style>
+
+<body th:object="${post}">
+    <div class="container"> 
+        <div class="header"> 
+            <h1>FORUM SYSTEM</h1>
+            <p>Welcome to post by <span th:text="*{author.name}">John Doe</span></p>
+        </div>
+        <div class="post">
+
+            <h1 th:text="*{content}">This is a post.</h1>
+
+            <p class="likes">Likes: <span th:text="${likeCount}">0</span></p>
+
+            <button id="showLikers" class="button">Who_Liked?</button>
+
+            <div id="unhideThisInJS" th:each="liker : ${allLikers}" class="hidden">
+
+                <ul>
+
+                    <li th:text="${liker}">Liker</li>
+
+                </ul>
+
+            </div>
+
+            
+            <div id="AllComments" th:each="comment,iStat : ${AllComments}">
+                <ul>
+                    <li>
+                        <span th:text="${comment.content}">Comment</span>
+                        <p class="likes">❤️:<span th:text="${numLikesComment[__${iStat.index}__]}"></span></p>
+                        
+                        <form method="post" class="unlike-form"  action="#" th:action="@{/forum/comment/{commentId}/unlike/{id}(commentId = ${comment.id},id = ${post.id})}">
+                            <input type="submit" value="unlike" id="unlike" >
+                        </form>
+
+                        <form method="post" class="like-form" action="#" th:action="@{/forum/comment/{commentId}/like/{id}(commentId = ${comment.id},id = ${post.id})}">
+                            <input value="like" type="submit" id="like">
+                        </form>
+                        
+                    </li>
+                </ul>
+            </div>
+            <form method="post" action="#" th:action="@{/forum/post/{id}/comment(id = ${post.id})}">
+                <input type="text" name="Comment">
+                <input type="submit" value="Comment!" class="button">
+            </form>
+            <form method="post" action="#" th:action="@{/forum/post/{id}/like(id = ${post.id})}">
+                <input type="submit" value="PostLike !" class="button"> 
+            </form>
+        </div>
+        <div class="post-timestamps">
+            <p>Date & Time : <span th:text="${post.createdDate}"> 1</span></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById("showLikers").onclick = event => {
+            var likerList = document.getElementById("unhideThisInJS");
+            console.log(likerList.style.visibility);
+            if (likerList.style.visibility === "hidden") {
+                likerList.style.visibility = "visible";
+            } else {
+                likerList.style.visibility = "hidden";
+            }
+        }
+
+        document.querySelectorAll(".like-form").forEach(form => {
+            form.onsubmit = event => {
+                var unlike = form.querySelector(".unlike-button");
+                var like = form.querySelector(".like-button");
+                unlike.style.display = "inline"; // Show unlike button
+                like.style.display = "none"; // Hide like button
+                event.preventDefault();
+            }
+        });
+
+        document.querySelectorAll(".unlike-form").forEach(form => {
+            form.onsubmit = event => {
+                var unlike = form.querySelector(".unlike-button");
+                var like = form.querySelector(".like-button");
+                like.style.display = "inline"; // Show like button
+                unlike.style.display = "none"; // Hide unlike button
+                event.preventDefault();
+            }
+        });
+    </script>
+
+   
+    
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Student Details</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+			margin: 0;
+			padding: 0;
+		}
+
+		h1 {
+			text-align: center;
+			padding: 20px;
+			background-color: #333;
+			color: white;
+			margin: 0;
+		}
+
+		form {
+			background-color: white;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			margin: 20px auto;
+			width: 80%;
+			max-width: 800px;
+		}
+
+		table {
+			width: 70%;
+			border-collapse: collapse;
+			margin-top: 10px;
+			margin: 0 auto;
+		}
+
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: center;
+		}
+
+		th {
+			background-color: #f2f2f2;
+		}
+
+		.add-button,
+		.edit-button,
+		.del-button {
+			padding: 5px 10px;
+			border: none;
+			cursor: pointer;
+			font-size: 14px;
+			margin-right: 5px;
+			border-radius: 3px;
+			color: white;
+		}
+
+		.edit-delete-buttons {
+			display: flex;
+			gap: 5px;
+			background-color: transparent;
+		}
+
+		.edit-button {
+			background-color: #3498db;
+		}
+
+		.del-button {
+			background-color: #e74c3c;
+		}
+
+		.add-button {
+			background-color: #27ae60;
+			color: white;
+			padding: 10px 20px;
+		}
+
+		input[type="text"] {
+			padding: 8px;
+			width: 100%;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+		}
+
+		table tr {
+			height: 10px;
+		}
+
+		table td {
+			height: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Student Details</h1>
+	<table>
+		<tr>
+			<th class="table-heading">Rank</th>
+			<th class="table-heading">Name</th>
+			<th class="table-heading">Score</th>
+			<th class="table-heading">Operations</th>
+		</tr>
+		<tr th:each="rec, recordIndex : ${record}">
+			<td th:text="${rec.rank}">student rank</td>
+			<td th:text="${rec.name}">student name</td>
+			<td th:text="${rec.score}">student score</td>
+			<td>
+				<div class="edit-delete-buttons">
+					<form th:action="@{/editStudent}" method="post">
+						<input type="hidden" name="index" th:value="${recordIndex.index}">
+						<button class="edit-button" type="submit">Edit</button>
+					</form>
+					<form th:action="@{/deleteStudent}" method="post">
+						<input type="hidden" name="index" th:value="${recordIndex.index}">
+						<button class="del-button" type="submit">Delete</button>
+					</form>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<form action="/studentrecord" method="post">
+		<input type="text" id="Sname" name="Sname" placeholder="Student Name" />
+		<input type="text" id="Sscore" name="Sscore" placeholder="Student Score" />
+		<button class="add-button" name="add-button" type="submit">
+			Add Details
+		</button>
+	</form>
+</body>
+
+</html>
